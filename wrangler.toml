@@ -1,0 +1,13 @@
+name = "general"
+type = "webpack"
+route = ''
+zone_id = ''
+usage_model = ''
+compatibility_flags = []
+workers_dev = true
+compatibility_date = "2021-12-14"
+
+account_id = "9f35f308216b266d6a60a18e182dad33"
+kv_namespaces = [
+    { binding = "MY_KV", id = "f41a44724fcf4a319187916100afca46", preview_id = "f41a44724fcf4a319187916100afca46" }
+]
