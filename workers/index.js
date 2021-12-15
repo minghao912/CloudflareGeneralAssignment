@@ -9,21 +9,49 @@ async function handleRequest(request) {
         return new Response("Invalid URL", { headers: { "content-type": "text/plain" } }, { status: 400 });
     }
 
-    // Can do either a GET or POST request
+    // Respond to request
     let response;
-
     if (request.method === "GET") {
-        response = await getAllPosts();
+        response = await getAllPosts(request);
     } else if (request.method === "POST") {
-        response = await addNewPost(request);
+        response = await addNewPost(request, myHeaders);
+    } else if (request.method === "OPTIONS") {
+        response = handleOptions(request);
     } else {
-        response = new Response("Expected GET or POST", {headers: { "content-type": "text/plain" }}, { status: 500 });
+        response = new Response("Method not allowed", {headers: { "content-type": "text/plain" }}, { status: 500 });
     }
 
     return response;
 }
 
-async function getAllPosts() {
+function handleOptions(request) {
+    const myHeaders = new Headers();
+    myHeaders.set("Access-Control-Allow-Origin", '*');
+    myHeaders.set("Access-Control-Allow-Methods", "GET, HEAD, POST, OPTIONS");
+    myHeaders.set("Access-Control-Allow-Headers", "Origin, Content-Type, X-Auth-Token, Accept");
+    myHeaders.set("Access-Control-Allow-Credentials", "true");
+    myHeaders.set("Access-Control-Max-Age", "86400",);
+    myHeaders.set("Content-Type", "application/json, text/plain, */*");
+
+    if (request.headers.get("Origin") !== null &&
+        request.headers.get("Access-Control-Request-Method") !== null &&
+        request.headers.get("Access-Control-Request-Headers") !== null) {
+
+        // Handle CORS pre-flight request.
+        return new Response(null, {
+            headers: myHeaders
+        })
+    } else {
+        // Handle standard OPTIONS request.
+        return new Response(null, {
+            headers: {
+                "Allow": "GET, HEAD, POST, OPTIONS",
+            }
+        })
+    }
+}
+
+async function getAllPosts(request) {
     // Get all the keys in the namespace
     const listOfKeys = await MY_KV.list();
 
@@ -34,12 +62,12 @@ async function getAllPosts() {
     }
 
     // Return array of posts
-    return new Response(arrayOfPosts, {
-        headers: { "content-type": "text/plain" }
+    return new Response("[" + arrayOfPosts + "]", {
+        headers: { "Access-Control-Allow-Origin": '*', "Content-Type": "application/json"}
     });
 }
 
-async function addNewPost(request) {
+async function addNewPost(request, headers) {
     // Generate a message ID for the key
     const messageID = self.crypto.randomUUID();
 
@@ -55,7 +83,7 @@ async function addNewPost(request) {
     const success = await MY_KV.put(messageID, JSON.stringify(body));
     const message = await MY_KV.get(messageID);
 
-    return new Response("{success: true, \"message\": " + message + "}", {
-        headers: { "content-type": "text/plain" }
+    return new Response({"success": "true", "message": message}, {
+        headers: headers
     });
 }

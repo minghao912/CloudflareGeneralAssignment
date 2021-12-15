@@ -1,3 +1,7 @@
 {
-    "main": "workers/index.js"
+    "main": "workers/index.js",
+    "dependencies": {
+        "@emotion/react": "^11.7.1",
+        "@mui/material": "^5.2.4"
+    }
 }
