@@ -1,0 +1,27 @@
+.centeredItem {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.floatBottomRight {
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  bottom: 40px;
+  right: 40px;
+  /* background-color: #292929; */
+  border-radius: 10px;
+  text-align: center;
+  padding-top: 2.5vw;
+  box-shadow: 2px 2px 3px #999;
+  z-index: 999;
+}
+
+.floatBottomRight:hover {
+  cursor: pointer;
+  box-shadow: 4px 4px 6px #999;
+}
