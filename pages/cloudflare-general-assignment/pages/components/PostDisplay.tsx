@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-import { Box, Card, CardActions, CardContent, CardHeader, Button, Typography } from '@mui/material';
+import { Box, Card, CardActions, CardContent, CardHeader, Button, Typography, Tooltip, CardMedia } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
 
@@ -44,24 +44,42 @@ async function getPosts(): Promise<Post[]> {
 function cardsGenerator(posts: Post[], forceRefreshCallback: () => void): JSX.Element[] {
     let cards = [] as JSX.Element[];
     for (const post of posts) {
+        let cardImage: JSX.Element;
+        if (post.image && post.image != "") {
+            cardImage = (<CardMedia
+                component="img"
+                width="100%"
+                image={post.image}
+            />);
+        } else cardImage = <></>;
+
         cards.push(<Card sx={{ maxWidth: "100%", margin: "2%" }} key={post.postID}>
             <CardHeader 
                 title={post.title}
-                subheader={post.username + ", " + new Date(post.timestamp).toLocaleString()}
+                subheader={post.username + ", " + new Date(post.timestamp).toLocaleString().replace(", ", " at ")}
             />
+            {cardImage}
             <CardContent>
                 <Typography variant="body1" color="text.primary">
                     {post.content}
                 </Typography>
             </CardContent>
-            <CardActions>
+            <CardActions disableSpacing>
+                <Tooltip title="Upvotes">
+                    <Typography sx={{marginLeft:"1%"}} variant="body1" color="seagreen">{post.upvotes}</Typography>
+                </Tooltip>
                 <Button onClick={() => updateVotes(post, true, forceRefreshCallback)}>
                     <FontAwesomeIcon icon={faArrowUp} />
-                </Button>
-                {post.upvotes - post.downvotes}
+                </Button> 
+                <Tooltip title="Overall">
+                    <Typography variant="body1" color="text.secondary">{post.upvotes - post.downvotes}</Typography>
+                </Tooltip>
                 <Button onClick={() => updateVotes(post, false, forceRefreshCallback)}>
                     <FontAwesomeIcon icon={faArrowDown} />
                 </Button>
+                <Tooltip title="Downvotes">
+                    <Typography variant="body1" color="salmon">{post.downvotes}</Typography>
+                </Tooltip>
             </CardActions>
         </Card>);
     }
@@ -91,7 +109,8 @@ function updateVotes(post: Post, up: boolean, forceRefreshCallback: () => void):
         timestamp: post.timestamp,
         content: post.content,
         upvotes: (up ? post.upvotes + 1 : post.upvotes),
-        downvotes: (!up ? post.downvotes + 1 : post.downvotes)
+        downvotes: (!up ? post.downvotes + 1 : post.downvotes),
+        image: post.image
     }, forceRefreshCallback);
 }
 
