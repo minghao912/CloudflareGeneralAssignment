@@ -16,7 +16,7 @@ async function handleRequest(request) {
     } else if (request.method === "PUT") {
         response = await updatePost(request);
     } else if (request.method === "POST") {
-        response = await addNewPost(request, myHeaders);
+        response = await addNewPost(request);
     } else if (request.method === "OPTIONS") {
         response = handleOptions(request);
     } else {
@@ -106,7 +106,7 @@ async function updatePost(request) {
     });
 }
 
-async function addNewPost(request, headers) {
+async function addNewPost(request) {
     // Generate a post ID for the key
     const postID = self.crypto.randomUUID();
 
