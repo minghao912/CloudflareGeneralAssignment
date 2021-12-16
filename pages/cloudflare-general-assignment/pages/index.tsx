@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusSquare, faBars, faEnvelope, faBell, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { Container, Box, AppBar, Toolbar, IconButton, Typography } from '@mui/material';
 
-import PostDisplay from "./components/PostDisplay";
+import PostDisplay from "../components/PostDisplay";
 import styles from "./index.module.css";
 
 export default function Home(props: any): JSX.Element {

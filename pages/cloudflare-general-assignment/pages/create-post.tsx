@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { Container, Box, AppBar, Toolbar, Typography } from '@mui/material';
 
-import PostCreator from "./components/PostCreator";
+import PostCreator from "../components/PostCreator";
 import styles from "./index.module.css";
 
 export default function CreatePost(props: any): JSX.Element {
