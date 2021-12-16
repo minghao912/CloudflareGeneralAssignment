@@ -2,5 +2,5 @@ Git Credentials:
 Username: N4M7Q1VuGBmrnjow15gjpzFtcC
 Password: m8nE2L78
 
-Workers URL: 
-Pages URL: 
+Workers URL: https://general.minghao912.workers.dev/
+Pages URL: https://d8829eb4.cloudflaregeneralassignment.pages.dev/
