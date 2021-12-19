@@ -21,7 +21,9 @@ export default function PostCreator(props: {routeChangeHome: () => void}): JSX.E
             timestamp: new Date().toISOString(),
             content: content,
             image: (imageURL === "") ? "" : imageURL
-        } as NewlyCreatedPost).then(response => {
+        } as NewlyCreatedPost, {
+            withCredentials: true
+        }).then(response => {
             console.log("Successfully created a new post", response);
             props.routeChangeHome();
         }).catch(err => {

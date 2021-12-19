@@ -19,9 +19,13 @@ export default function PostDisplay(props: any): JSX.Element {
 
     // On load, get the posts, format them as cards, and then render
     useEffect(() => {
-        getPosts().then(response => {
-            setPostsToDisplay(cardsGenerator(sortPosts(response), forceRefresh));
-        }).catch(err => console.error("There was an error getting posts", err));
+        async function anonymous() {
+            await getPosts().then(response => {
+                setPostsToDisplay(cardsGenerator(sortPosts(response), forceRefresh));
+            }).catch(err => console.error("There was an error getting posts", err));
+        }
+
+        anonymous();
     }, [refresh]);
 
     return (
@@ -53,7 +57,7 @@ function cardsGenerator(posts: Post[], forceRefreshCallback: () => void): JSX.El
             />);
         } else cardImage = <></>;
 
-        cards.push(<Card sx={{ maxWidth: "100%", margin: "2%" }} key={post.postID}>
+        cards.push(<Card sx={{ maxWidth: "100%", margin: "2%" }} id={post.postID} key={post.postID}>
             <CardHeader 
                 title={post.title}
                 subheader={post.username + ", " + new Date(post.timestamp).toLocaleString().replace(", ", " at ")}
