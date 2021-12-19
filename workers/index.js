@@ -132,6 +132,8 @@ async function addNewPost(request) {
     const tunnel = "fun-excited-professor-ozone";
     let cookie;
     let usernameOK = true;
+    let inputUsername;
+    let tokenUsername;
     if (existingUsernames.includes(body.username)) {
         console.log("Existing username detected: ", body.username)
 
@@ -147,8 +149,8 @@ async function addNewPost(request) {
         // If existing username, check cookie
         await fetch(`https://${tunnel}.trycloudflare.com/verify`, {headers: {"Set-Cookie": cookieToken}}).then(async (response) => {
             await response.text().then(data => {
-                const inputUsername = body.username.trim();
-                const tokenUsername = data.trim();
+                inputUsername = body.username.trim();
+                tokenUsername = data.trim();
                 console.log("Input username: ", inputUsername);
                 console.log("Token username: ", tokenUsername);
 
@@ -174,7 +176,7 @@ async function addNewPost(request) {
     console.log("Username is OK: ", usernameOK);
     if (!usernameOK) {
         console.log("Username does not match cookie, aborting the creation of new post");
-        return new Response(JSON.stringify({"success": "false"}), {
+        return new Response(JSON.stringify({"success": "false", "message": "Username " + inputUsername + " does not match token username " + tokenUsername}), {
             headers: { "Access-Control-Allow-Origin": request.headers.get("Origin"), "Access-Control-Allow-Credentials": "true", "Content-Type": "application/json", "Set-Cookie": cookie },
             status: 400
         });

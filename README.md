@@ -1,0 +1,1 @@
+If the frontend seems to not be letting you create a second post, try using Firefox. It seems to be an issue of Cookies not willing to be automatically sent if the two domains are not the same.
